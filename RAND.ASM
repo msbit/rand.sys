@@ -53,10 +53,6 @@ entry_interrupt:
   push  di
   push  ds
 
-  mov   dx, offset debug_msg
-  mov   ah, 9
-  int   21h
-
   lds   bx, dword ptr cs:[request_off]
 
   mov   di, word ptr [bx + 2]
@@ -76,13 +72,13 @@ command_none:
   ret
 
 command_0:
-  ; If the initialization routine determines that it cannot set up the device
-  ; and wants to terminate without using any memory, use the following
-  ; procedure:
-  mov   word ptr [bx + 14], 0   ; Set the ending address offset to 0
-  mov   word ptr [bx + 16], cs  ; Set the ending address segment to CS
+  mov   word ptr [bx + 14], offset ending_address
+  mov   word ptr [bx + 16], cs
+
+  mov   word ptr [bx + 3], 0100h
 
   ret
 
+ending_address:
 ends text
 end start
