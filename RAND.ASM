@@ -6,7 +6,7 @@ start:
   dw  8000h             ; character device
   dw  entry_strategy
   dw  entry_interrupt
-  db  'RAND$',0,0,0
+  db  'RAND$   '
 
 request_off dw  0
 request_seg dw  0
