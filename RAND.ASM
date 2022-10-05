@@ -10,34 +10,33 @@ start:
 
 request_off dw  0
 request_seg dw  0
-debug_msg   db  'rand',0dh,0ah,'$'
 
 commands:
-  dw  command_0     ; 0   initialization
-  dw  command_none  ; 1   media check
-  dw  command_none  ; 2   build bfb
-  dw  command_none  ; 3   ioctl input
-  dw  command_none  ; 4   input (read)
-  dw  command_none  ; 5   nondestructive input no wait
-  dw  command_none  ; 6   input status
-  dw  command_none  ; 7   input flush
-  dw  command_none  ; 8   output (write)
-  dw  command_none  ; 9   output (write with verify)
-  dw  command_none  ; 10  output status
-  dw  command_none  ; 11  output flush
-  dw  command_none  ; 12  ioctl output
-  dw  command_none  ; 13  device open
-  dw  command_none  ; 14  device close
-  dw  command_none  ; 15  removable media
-  dw  command_none  ; 16
-  dw  command_none  ; 17
-  dw  command_none  ; 18
-  dw  command_none  ; 19  generic ioctl request
-  dw  command_none  ; 20
-  dw  command_none  ; 21
-  dw  command_none  ; 22
-  dw  command_none  ; 23  get logical device
-  dw  command_none  ; 24  set logical device
+  dw  command_0         ; 0   initialization
+  dw  command_unknown   ; 1   media check
+  dw  command_unknown   ; 2   build bfb
+  dw  command_unknown   ; 3   ioctl input
+  dw  command_unknown   ; 4   input (read)
+  dw  command_unknown   ; 5   nondestructive input no wait
+  dw  command_unknown   ; 6   input status
+  dw  command_unknown   ; 7   input flush
+  dw  command_unknown   ; 8   output (write)
+  dw  command_unknown   ; 9   output (write with verify)
+  dw  command_unknown   ; 10  output status
+  dw  command_unknown   ; 11  output flush
+  dw  command_unknown   ; 12  ioctl output
+  dw  command_unknown   ; 13  device open
+  dw  command_unknown   ; 14  device close
+  dw  command_unknown   ; 15  removable media
+  dw  command_unknown   ; 16
+  dw  command_unknown   ; 17
+  dw  command_unknown   ; 18
+  dw  command_unknown   ; 19  generic ioctl request
+  dw  command_unknown   ; 20
+  dw  command_unknown   ; 21
+  dw  command_unknown   ; 22
+  dw  command_unknown   ; 23  get logical device
+  dw  command_unknown   ; 24  set logical device
 
 entry_strategy:
   mov   word ptr cs:[request_off], bx
@@ -68,7 +67,9 @@ entry_interrupt:
 
   retf
 
-command_none:
+command_unknown:
+  mov   word ptr [bx + 3], 8103h
+
   ret
 
 command_0:
