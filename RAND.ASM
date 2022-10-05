@@ -8,13 +8,13 @@ start:
   dw  entry_interrupt
   db  'RAND$',0,0,0
 
-request_seg dw  0
 request_off dw  0
+request_seg dw  0
 debug_msg   db  'rand',0dh,0ah,'$'
 
 entry_strategy:
-  mov   word ptr cs:[request_seg], es
   mov   word ptr cs:[request_off], bx
+  mov   word ptr cs:[request_seg], es
 
   retf
 
@@ -29,8 +29,7 @@ entry_interrupt:
   mov   ah, 9
   int   21h
 
-  mov   ds, cs:[request_seg]
-  mov   bx, cs:[request_off]
+  lds   bx, dword ptr cs:[request_off]
 
   ; If the initialization routine determines that it cannot set up the device
   ; and wants to terminate without using any memory, use the following
