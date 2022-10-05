@@ -1,0 +1,9 @@
+rand.sys: rand.obj
+  tlink /t rand.obj,rand.sys
+
+rand.obj: rand.asm
+  tasm /w2 rand.asm
+
+clean:
+  del rand.obj
+  del rand.sys
