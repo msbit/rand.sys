@@ -55,6 +55,7 @@ entry_interrupt:
   lds   bx, dword ptr cs:[request_off]
 
   mov   di, word ptr [bx + 2]
+  shl   di, 1
 
   call  word ptr cs:[di + commands]
 
