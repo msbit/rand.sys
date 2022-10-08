@@ -16,7 +16,7 @@ commands:
   dw  command_unknown   ; 1   media check
   dw  command_unknown   ; 2   build bfb
   dw  command_unknown   ; 3   ioctl input
-  dw  command_unknown   ; 4   input (read)
+  dw  command_4         ; 4   input (read)
   dw  command_unknown   ; 5   nondestructive input no wait
   dw  command_unknown   ; 6   input status
   dw  command_unknown   ; 7   input flush
@@ -76,6 +76,24 @@ command_unknown:
 command_0:
   mov   word ptr [bx + 14], offset ending_address
   mov   word ptr [bx + 16], cs
+
+  mov   word ptr [bx + 3], 0100h
+
+  ret
+
+command_4:
+  push  di
+
+  push  ds
+
+  lds   di, dword ptr [bx + 14]
+  mov   byte ptr [di], 'A'
+
+  pop   ds
+
+  mov   word ptr [bx + 18], 1
+
+  pop   di
 
   mov   word ptr [bx + 3], 0100h
 
