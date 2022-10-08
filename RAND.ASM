@@ -1,5 +1,5 @@
-segment text
-assume cs:text
+model tiny
+codeseg
   org 0
 
 start:
@@ -112,5 +112,4 @@ command_4:
   ret
 
 end_addr:
-ends text
 end start
