@@ -56,10 +56,18 @@ entry_interrupt:
   lds   bx, dword ptr cs:[request_off]    ; load request pointer into DS:BX
 
   mov   di, word ptr [bx + 2]             ; read command code
+  cmp   di, 24                            ; is it greater than 24?
+  ja    _command_unknown                  ; yes, jump forward
+
   shl   di, 1                             ; convert to table offset
 
   call  word ptr cs:[di + commands]       ; execute command handler
+  jmp   short _done                       ; jump forward
 
+_command_unknown:
+  call  command_unknown                   ; handle command as unknown
+
+_done:
   pop   ds                                ; revert state
   pop   di                                ;  "
   pop   dx                                ;  "
