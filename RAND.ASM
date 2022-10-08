@@ -1,4 +1,5 @@
 segment text
+assume cs:text
   org 0
 
 start:
