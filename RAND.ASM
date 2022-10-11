@@ -99,8 +99,12 @@ command_4:
   push  ds                                ; clobbers DS
 
   lds   di, dword ptr [bx + 14]           ; load output buffer into DS:DI
-  mov   byte ptr [di], 'A'                ; write 'A' to output buffer
+  push  ax                                ; clobbers AX
+  call  next_rand                         ; get next random number
 
+  mov   byte ptr [di], al                 ; write to output buffer
+
+  pop   ax
   pop   ds
 
   mov   word ptr [bx + 18], 1             ; set byte count to 1
@@ -108,6 +112,78 @@ command_4:
   pop   di
 
   mov   word ptr [bx + 3], 0100h          ; set status done
+
+  ret
+
+bits0   db  0feh
+bits1   db  0ffh
+bits2   db  07fh
+
+next_rand:
+  push  bx
+  push  cx
+  push  dx
+
+  mov   bl, byte ptr cs:[bits0]     ; tap bit 0
+  and   bl, 1                       ;  "
+  mov   al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits0]     ; tap bit 2
+  shr   bl, 1                       ;  "
+  and   bl, 2                       ;  "
+  or    al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits0]     ; tap bit 5
+  shr   bl, 3                       ;  "
+  and   bl, 4                       ;  "
+  or    al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits1]     ; tap bit 9
+  shl   bl, 2                       ;  "
+  and   bl, 8                       ;  "
+  or    al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits1]     ; tap bit 11
+  shl   bl, 1                       ;  "
+  and   bl, 16                      ;  "
+  or    al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits1]     ; tap bit 14
+  shr   bl, 1                       ;  "
+  and   bl, 32                      ;  "
+  or    al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits2]     ; tap bit 18
+  shl   bl, 4                       ;  "
+  and   bl, 64                      ;  "
+  or    al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits2]     ; tap bit 20
+  shl   bl, 3                       ;  "
+  and   bl, 128                     ;  "
+  or    al, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits2]     ; xor bit 17
+  shr   bl, 1                       ;  "
+  and   bl, 1                       ;  "
+  mov   cl, bl                      ;  "
+
+  mov   bl, byte ptr cs:[bits2]     ; xor bit 22
+  shr   bl, 6                       ;  "
+  and   bl, 1                       ;  "
+  xor   cl, bl                      ;  "
+
+  clc                               ; rotate left 1 bit
+  rcl   byte ptr cs:[bits0], 1      ;  "
+  rcl   byte ptr cs:[bits1], 1      ;  "
+  rcl   byte ptr cs:[bits2], 1      ;  "
+  and   byte ptr cs:[bits2], 07fh   ; constrain to 23 bits
+
+  or    byte ptr cs:[bits0], cl     ; feed in xor result
+
+  pop   dx
+  pop   cx
+  pop   bx
 
   ret
 
