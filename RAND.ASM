@@ -117,7 +117,7 @@ command_4:
 
 bits0   db  0feh
 bits1   db  0ffh
-bits2   db  07fh
+bits2   db  0ffh
 
 next_rand:
   push  bx
@@ -177,7 +177,6 @@ next_rand:
   rcl   byte ptr cs:[bits0], 1      ;  "
   rcl   byte ptr cs:[bits1], 1      ;  "
   rcl   byte ptr cs:[bits2], 1      ;  "
-  and   byte ptr cs:[bits2], 07fh   ; constrain to 23 bits
 
   or    byte ptr cs:[bits0], cl     ; feed in xor result
 
