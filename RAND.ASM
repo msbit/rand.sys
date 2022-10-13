@@ -115,68 +115,66 @@ command_4:
 
   ret
 
-bits0   db  0feh
+bits0   dw  0fffeh
 bits1   db  0ffh
-bits2   db  0ffh
 
 next_rand:
   push  bx
   push  cx
   push  dx
 
-  mov   bl, byte ptr cs:[bits0]     ; tap bit 0
-  and   bl, 1                       ;  "
+  mov   bx, word ptr cs:[bits0]     ; tap bit 0
+  and   bx, 1                       ;  "
   mov   al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits0]     ; tap bit 2
-  shr   bl, 1                       ;  "
+  mov   bx, word ptr cs:[bits0]     ; tap bit 2
+  shr   bx, 1                       ;  "
   and   bl, 2                       ;  "
   or    al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits0]     ; tap bit 5
-  shr   bl, 3                       ;  "
+  mov   bx, word ptr cs:[bits0]     ; tap bit 5
+  shr   bx, 3                       ;  "
   and   bl, 4                       ;  "
   or    al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits1]     ; tap bit 9
-  shl   bl, 2                       ;  "
+  mov   bx, word ptr cs:[bits0]     ; tap bit 9
+  shr   bx, 6                       ;  "
   and   bl, 8                       ;  "
   or    al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits1]     ; tap bit 11
-  shl   bl, 1                       ;  "
+  mov   bx, word ptr cs:[bits0]     ; tap bit 11
+  shr   bx, 7                       ;  "
   and   bl, 16                      ;  "
   or    al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits1]     ; tap bit 14
-  shr   bl, 1                       ;  "
+  mov   bx, word ptr cs:[bits0]     ; tap bit 14
+  shr   bx, 9                       ;  "
   and   bl, 32                      ;  "
   or    al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits2]     ; tap bit 18
+  mov   bl, byte ptr cs:[bits1]     ; tap bit 18
   shl   bl, 4                       ;  "
   and   bl, 64                      ;  "
   or    al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits2]     ; tap bit 20
+  mov   bl, byte ptr cs:[bits1]     ; tap bit 20
   shl   bl, 3                       ;  "
   and   bl, 128                     ;  "
   or    al, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits2]     ; xor bit 17
+  mov   bl, byte ptr cs:[bits1]     ; xor bit 17
   shr   bl, 1                       ;  "
   and   bl, 1                       ;  "
   mov   cl, bl                      ;  "
 
-  mov   bl, byte ptr cs:[bits2]     ; xor bit 22
+  mov   bl, byte ptr cs:[bits1]     ; xor bit 22
   shr   bl, 6                       ;  "
   and   bl, 1                       ;  "
   xor   cl, bl                      ;  "
 
   clc                               ; rotate left 1 bit
-  rcl   byte ptr cs:[bits0], 1      ;  "
+  rcl   word ptr cs:[bits0], 1      ;  "
   rcl   byte ptr cs:[bits1], 1      ;  "
-  rcl   byte ptr cs:[bits2], 1      ;  "
 
   or    byte ptr cs:[bits0], cl     ; feed in xor result
 
