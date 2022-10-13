@@ -1,3 +1,8 @@
+all: rand.sys read.exe
+
+read.exe: read.c
+  tcc read.c
+
 rand.sys: rand.obj
   tlink /t rand.obj,rand.sys
 
@@ -7,3 +12,4 @@ rand.obj: rand.asm
 clean:
   del rand.obj
   del rand.sys
+  del read.exe
